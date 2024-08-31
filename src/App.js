@@ -36,26 +36,36 @@ const updateTaskDone = (taskIndex, newDone) => {
     return newTasks;
    })
 }
+
+const deleteTask = (taskIndex) => {
+        setTasks((prevTasks) => prevTasks.filter((_, index) => index !== taskIndex));
+}
+
 const numberComplete = tasks.filter(t => t.done).length;
 const numberTotal = tasks.length;
 const goalAchieved = numberComplete === numberTotal && numberTotal !== 0;
 console.log("GOAL", goalAchieved,numberComplete,numberTotal );
 
 
-  return (
-    <div className='main'>
-      <div className='heading'> My Magical List </div>
-      {goalAchieved? 
-        <div className="goal">GOAL ACHIEVED</div>:
-        <div className="counter">{numberComplete}/{numberTotal} Complete</div>
-      }
-      <div className='note'><textarea placeholder='Gratitude Letter to God' type="text"/></div>
-      <TaskForm addTask ={addTask}/>
-      {tasks.map((task,index) => 
-        <Task {...task} onToggle={done => (updateTaskDone(index,done))} />
-      )} 
-    </div>
-  );
+    return (
+        <div className='main'>
+            <div className='heading'> My Magical List </div>
+            {goalAchieved ?
+                <div className="goal">GOAL ACHIEVED</div> :
+                <div className="counter">{numberComplete}/{numberTotal} Complete</div>
+            }
+            <div className='note'><textarea placeholder='Gratitude Letter to God' type="text" /></div>
+            <TaskForm addTask={addTask} />
+            {tasks.map((task, index) =>
+                <Task
+                    key={index}
+                    {...task}
+                    onToggle={done => updateTaskDone(index, done)}
+                    onDelete={() => deleteTask(index)} // Pass the delete function
+                />
+            )}
+        </div>
+    );
 }
 
 export default App;
